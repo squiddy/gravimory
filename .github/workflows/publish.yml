@@ -1,0 +1,45 @@
+name: Publish
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  uv:
+    name: python
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install libsdl2-dev
+        run: |
+          sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu `lsb_release -sc` main universe restricted multiverse"
+          sudo apt-get update -y -qq
+          sudo apt-get install libsdl2-dev
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install the project
+        run: uv sync --all-extras --dev
+
+      - name: Build
+        run: |
+          rm -rf pyxel_utils/
+          cp -R $(uv run python -c "import pyxel_utils; print(pyxel_utils.__path__[0])") .
+          uv run pyxel package . main.py
+          uv run pyxel app2html gravimory.pyxapp
+          rm -rf pyxel_utils/ gravimory.pyxapp
+          mkdir build
+          mv gravimory.html build/index.html
+
+      - name: Setup butler
+        uses: remarkablegames/setup-butler@v1
+
+      - name: Upload to itch.io
+        run: butler push build squidddddy/gravimory:html5
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
