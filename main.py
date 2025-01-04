@@ -5,6 +5,8 @@ from dataclasses import dataclass, field
 
 pyxel.init(300, 400)
 pyxel.images[0].load(0, 0, "sprites.png", incl_colors=True)
+font18 = pyxel.Font("font-18.bdf")
+font32 = pyxel.Font("font-32.bdf")
 
 
 @enum.unique
@@ -276,7 +278,8 @@ def draw_playing_scene():
     grid.draw()
     draw_player()
 
-    blt_number(pyxel.width // 2, 330, steps_taken, scale=3)
+    pyxel_utils.text_centered(pyxel.width // 2, 330, str(steps_taken), 5, font32)
+    pyxel_utils.text_centered(pyxel.width // 2, 360, "steps taken", 5, font18)
 
 
 def update_title_scene():
@@ -286,11 +289,20 @@ def update_title_scene():
 
 
 def draw_title_scene():
-    pyxel_utils.blt_topleft(160, 180, *Sprite.CLOUD_2.value, scale=5)
-    pyxel_utils.blt_topleft(-30, 240, *Sprite.CLOUD_5.value, scale=10)
+    pyxel_utils.blt_topleft(0, 200, *Sprite.PLATE.value, scale=3)
+    pyxel_utils.blt_topleft(20, 180, *Sprite.PLATE.value, scale=2)
+    pyxel_utils.blt_topleft(10, 170, *Sprite.PLATE.value, scale=1)
+    pyxel_utils.blt_topleft(160, 150, *Sprite.CLOUD_2.value, scale=5)
+    pyxel_utils.blt_topleft(-30, 210, *Sprite.CLOUD_5.value, scale=10)
 
     sprite = animate((60, Sprite.COYOTE), (15, Sprite.COYOTE_FOOT_UP))
-    pyxel_utils.blt_topleft(60, 120, *sprite.value, scale=4)
+    pyxel_utils.blt_topleft(60, 90, *sprite.value, scale=4)
+
+    pyxel_utils.text_centered(pyxel.width // 2 - 70, 8, "Falling", 5, font32)
+    pyxel_utils.text_centered(pyxel.width // 2, 36, "is learning", 5, font32)
+    pyxel_utils.text_centered(
+        pyxel.width // 2, 370, "Press [SPACE] to start", 7, font18
+    )
 
 
 def update():
@@ -302,7 +314,7 @@ def update():
 
 
 def draw():
-    pyxel.cls(4)
+    pyxel.cls(9)
 
     match game_state:
         case GameState.TITLE:
