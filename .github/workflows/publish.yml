@@ -40,6 +40,6 @@ jobs:
         uses: remarkablegames/setup-butler@v1
 
       - name: Upload to itch.io
-        run: butler push build squidddddy/gravimory:html5
+        run: butler push build squidddddy/falling-is-learning:html5
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
