@@ -32,7 +32,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "pyxel", specifier = ">=2.2.10" },
-    { name = "pyxel-utils", specifier = ">=0.1.1" },
+    { name = "pyxel-utils", specifier = ">=0.1.2" },
 ]
 
 [package.metadata.requires-dev]
@@ -80,11 +80,11 @@ wheels = [
 
 [[package]]
 name = "pyxel-utils"
-version = "0.1.1"
+version = "0.1.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b8/d6/0c7a1bb887f6e4358afb3007004064655b35a17e1f839943bf894a6daf00/pyxel_utils-0.1.1.tar.gz", hash = "sha256:841b225e7830d23ac121019ec307062910d2a38d939bca6a22485fcfdd4b1a73", size = 13670 }
+sdist = { url = "https://files.pythonhosted.org/packages/cd/fb/087a4cd1002fc6ca458b5e9d0201e1cb44f8e3eed582c75186e00a48aa08/pyxel_utils-0.1.2.tar.gz", hash = "sha256:39f934640c8690ac4a8c9dc8eda0e69c0d1625cb1047a0a592da5b709933c2bb", size = 13700 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4c/1d/8deee47c519213a6302484842730f8b08234d20bb0be7db760db09fa9deb/pyxel_utils-0.1.1-py3-none-any.whl", hash = "sha256:2064088b7961edb81c4efccd856b02cdf4eaf46de0db88e58e8307f997172890", size = 4161 },
+    { url = "https://files.pythonhosted.org/packages/4a/1d/cb3ab58242d66dc20892476b984eea5cbceb9ff5095ff45d13cdac10cc32/pyxel_utils-0.1.2-py3-none-any.whl", hash = "sha256:4d2df77c7247bb37abbdfb27675c91f0e15d2b033f8005a323511baf0d02253d", size = 4186 },
 ]
 
 [[package]]
