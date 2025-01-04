@@ -226,8 +226,8 @@ def update_playing_scene():
 
     if player_state == PlayerState.FALLING:
         player_falling_frames = max(1, player_falling_frames)
-        player_falling_frames *= 1.3
-        if player_falling_frames >= 60:
+        player_falling_frames *= 1.2
+        if player_falling_frames >= 90:
             retry_level()
 
     grid.update()
@@ -254,32 +254,36 @@ def blt_number(x, y, number, scale=1):
 
 def draw_player():
     if player_state == PlayerState.FALLING:
-        si, sx, sy, sw, sh, sc = Sprite.COYOTE_FALLING.value
-        sh -= player_falling_frames / 60 * 55
+        sprite = Sprite.COYOTE_FALLING.value
     else:
-        si, sx, sy, sw, sh, sc = animate(
-            (60, Sprite.COYOTE), (15, Sprite.COYOTE_FOOT_UP)
-        ).value
+        sprite = animate((60, Sprite.COYOTE), (15, Sprite.COYOTE_FOOT_UP)).value
 
     x, y = grid.get_xy_for_tile(player_x, player_y)
-    pyxel_utils.blt_topleft(x, y - sh + 8, si, sx, sy, sw, sh, sc)
+    pyxel_utils.blt_topleft(x, y - 40 + player_falling_frames, *sprite)
 
 
 def draw_playing_scene():
-    pyxel.rect(0, 0, pyxel.width, 100, 4)
+    pyxel.rect(0, 0, pyxel.width, 100, 3)
     pyxel_utils.blt_topleft(0, 98, 0, 16, 64, 64 + 16, 32, 0, scale=2)
     pyxel_utils.blt_topleft((64 + 16) * 2, 98, 0, 16, 64, 64 + 16, 32, 0, scale=2)
-
-    y = 100 + (grid.height + 1) * 16
-    pyxel.rect(0, y + 20, 300, pyxel.height, 4)
-    pyxel_utils.blt_topleft(0, y, 0, 16, 64 + 32, 64 + 16, 32, 0, scale=2)
-    pyxel_utils.blt_topleft((64 + 16) * 2, y, 0, 16, 64 + 32, 64 + 16, 32, 0, scale=2)
 
     grid.draw()
     draw_player()
 
+    y = 100 + (grid.height + 1) * 16
+    pyxel.rect(0, y + 20, 300, pyxel.height, 3)
+    pyxel_utils.blt_topleft(0, y, 0, 16, 64 + 32, 64 + 16, 32, 0, scale=2)
+    pyxel_utils.blt_topleft((64 + 16) * 2, y, 0, 16, 64 + 32, 64 + 16, 32, 0, scale=2)
+
     pyxel_utils.text_centered(pyxel.width // 2, 330, str(steps_taken), 5, font32)
-    pyxel_utils.text_centered(pyxel.width // 2, 360, "steps taken", 5, font18)
+    pyxel_utils.text_centered(pyxel.width // 2, 360, "steps taken", 7, font18)
+
+    if current_level == 0:
+        pyxel_utils.text_centered(
+            pyxel.width // 2, 180, "Use arrow keys to reach", 5, font18
+        )
+        pyxel_utils.text_centered(pyxel.width // 2, 200, "the other side.", 5, font18)
+        pyxel_utils.text_centered(pyxel.width // 2, 240, "Watch your step.", 5, font18)
 
 
 def update_title_scene():
@@ -298,10 +302,12 @@ def draw_title_scene():
     sprite = animate((60, Sprite.COYOTE), (15, Sprite.COYOTE_FOOT_UP))
     pyxel_utils.blt_topleft(60, 90, *sprite.value, scale=4)
 
-    pyxel_utils.text_centered(pyxel.width // 2 - 70, 8, "Falling", 5, font32)
-    pyxel_utils.text_centered(pyxel.width // 2, 36, "is learning", 5, font32)
+    pyxel_utils.text_centered(pyxel.width // 2 - 70 + 2, 8 - 1, "Falling", 5, font32)
+    pyxel_utils.text_centered(pyxel.width // 2 - 70, 8, "Falling", 7, font32)
+    pyxel_utils.text_centered(pyxel.width // 2 + 2, 36 - 1, "is learning", 5, font32)
+    pyxel_utils.text_centered(pyxel.width // 2, 36, "is learning", 7, font32)
     pyxel_utils.text_centered(
-        pyxel.width // 2, 370, "Press [SPACE] to start", 7, font18
+        pyxel.width // 2, 370, "Press [SPACE] to start", 5, font18
     )
 
 
