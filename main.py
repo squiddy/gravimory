@@ -13,7 +13,7 @@ font32 = pyxel.Font("font-32.bdf")
 class Sprite(enum.Enum):
     COYOTE = (0, 96, 64, 32, 48, 0)
     COYOTE_FALLING = (0, 128, 64, 48, 48, 0)
-    COYOTE_FOOT_UP = (0, 176, 64, 48, 48, 0)
+    COYOTE_FOOT_UP = (0, 176, 64, 32, 48, 0)
     PLATE = (0, 96, 16, 32, 16, 0)
     CLOUD_5 = (0, 64, 0, 32, 16, 0)
     CLOUD_4 = (0, 64, 16, 32, 16, 0)
