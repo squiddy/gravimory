@@ -126,13 +126,13 @@ class Grid:
 class GameState(enum.Enum):
     TITLE = 0
     PLAYING = 1
+    END = 2
 
 
 @enum.unique
 class PlayerState(enum.Enum):
     DEFAULT = 0
     FALLING = 1
-    WON = 2
 
 
 levels = [
@@ -153,6 +153,15 @@ x--x
 --xx
 xxx-
 x---
+""",
+    """
+x----
+xx---
+-x--.
+-xxxx
+----x
+--xxx
+--x--
 """,
 ]
 
@@ -187,10 +196,13 @@ def retry_level():
 
 
 def level_won():
-    global player_state, player_y, player_x, current_level, grid
+    global player_state, player_y, player_x, current_level, grid, game_state
     player_state = PlayerState.DEFAULT
     player_y = grid.height + 2
     current_level += 1
+    if current_level == len(levels):
+        game_state = GameState.END
+        return
     grid = load_level(current_level)
     player_x = grid.width // 2
     player_y = -1
@@ -231,25 +243,6 @@ def update_playing_scene():
             retry_level()
 
     grid.update()
-
-
-def blt_number(x, y, number, scale=1):
-    digits = [
-        (0, 0, 0, 6, 8, 0),
-        (0, 7, 0, 3, 8, 0),
-        (0, 10, 0, 6, 8, 0),
-        (0, 16, 0, 6, 8, 0),
-        (0, 22, 0, 7, 8, 0),
-        (0, 29, 0, 6, 8, 0),
-        (0, 35, 0, 6, 8, 0),
-        (0, 41, 0, 6, 8, 0),
-        (0, 47, 0, 6, 8, 0),
-        (0, 53, 0, 6, 8, 0),
-    ]
-    for i, digit in enumerate(str(number)):
-        d = digits[int(digit)]
-        pyxel_utils.blt_topleft(x, y, *d, scale=scale)
-        x += d[3] * scale
 
 
 def draw_player():
@@ -311,12 +304,38 @@ def draw_title_scene():
     )
 
 
+def draw_end_scene():
+    pyxel_utils.blt_topleft(55, 70, *Sprite.COYOTE.value, scale=6)
+
+    pyxel.rect(50, 175, 200, 60, 3)
+    pyxel_utils.text_centered(pyxel.width // 2, 180, "You won!", 5, font32)
+    pyxel_utils.text_centered(
+        pyxel.width // 2, 210, f"It took {steps_taken} steps", 5, font18
+    )
+    pyxel_utils.text_centered(
+        pyxel.width // 2, 370, "Press [SPACE] to restart", 7, font18
+    )
+
+
+def update_end_scene():
+    global game_state, current_level, grid, steps_taken
+
+    if pyxel.btnp(pyxel.KEY_SPACE):
+        game_state = GameState.PLAYING
+        current_level = 0
+        steps_taken = 0
+        grid = load_level(current_level)
+        retry_level()
+
+
 def update():
     match game_state:
         case GameState.TITLE:
             update_title_scene()
         case GameState.PLAYING:
             update_playing_scene()
+        case GameState.END:
+            update_end_scene()
 
 
 def draw():
@@ -327,6 +346,8 @@ def draw():
             draw_title_scene()
         case GameState.PLAYING:
             draw_playing_scene()
+        case GameState.END:
+            draw_end_scene()
 
 
 pyxel.run(update, draw)
